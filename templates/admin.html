@@ -1,0 +1,4 @@
+{% extends "application/base.html" %}
+{% block title %}Администрирование — LamoFrame{% endblock %}
+{% block app_nav %}<a class="btn btn-outline" href="/">Мастерская</a>{% endblock %}
+{% block app_content %}<main class="app-main"><section class="app-card">{{ content | replace("__ADMIN_CSRF__", csrf_token) | safe }}</section></main>{% endblock %}

@@ -1,0 +1,26 @@
+{% extends "application/base.html" %}
+{% block title %}{{ collection.name }} — {{ project.title }}{% endblock %}
+{% block app_nav %}<a class="btn btn-outline" href="{{ url("app_manage", project.pk) }}">Данные и доступ</a>{% endblock %}
+{% block app_content %}
+<main class="app-main">
+  <h1>{{ collection.name }}</h1>
+  <section class="app-card">
+    {% if truthy(fields) %}
+      <a class="btn btn-primary" href="{{ url("app_draft_record_new", project.pk, collection.pk) }}">Добавить запись</a>
+      <div class="app-table-wrap">
+        <table class="app-table">
+          <thead><tr>{% for field in fields %}<th scope="col">{{ field.name }}</th>{% endfor %}<th scope="col">Действие</th></tr></thead>
+          <tbody>{% for row in rows %}
+            <tr>{% for cell in row.cells %}<td>{{ cell|default_if_none("") }}</td>{% endfor %}
+              <td><a class="text-link" href="{{ url("app_draft_record", project.pk, collection.pk, row.id) }}">Редактировать</a></td>
+            </tr>
+          {% endfor %}</tbody>
+        </table>
+        {% if not truthy(rows) %}<p class="muted">В коллекции пока нет записей.</p>{% endif %}
+      </div>
+    {% else %}
+      <p>Добавьте поля в разделе «Данные и доступ».</p>
+    {% endif %}
+  </section>
+</main>
+{% endblock %}

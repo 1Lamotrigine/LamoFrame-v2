@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+
+{% block styles %}<link rel="stylesheet" href="/static/css/application.css?v={{ ASSET_VERSION }}">{% endblock %}
+{% block content %}
+<header class="topbar">
+  <a class="logo" href="{{ url("dashboard") }}">LamoFrame</a>
+  <div class="spacer"></div>
+  {% block app_nav %}{% endblock %}
+</header>
+{% block app_content %}{% endblock %}
+{% endblock %}

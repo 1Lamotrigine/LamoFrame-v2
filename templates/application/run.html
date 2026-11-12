@@ -1,0 +1,19 @@
+{% extends "application/base.html" %}
+
+{% block title %}{% if truthy(publication) %}{{ publication.snapshot.title }}{% else %}{{ project.title }}{% endif %} — LamoFrame{% endblock %}
+{% block app_nav %}
+  <button class="btn btn-outline btn-sm" id="refreshApplication" type="button">Обновить данные</button>
+  <span class="app-title">{% if truthy(publication) %}{{ publication.snapshot.title }}{% else %}{{ project.title }}{% endif %}</span>
+  {% if role == "owner" %}<a class="btn btn-outline" href="{{ url("app_manage", project.pk) }}">Данные и доступ</a>{% endif %}
+{% endblock %}
+{% block app_content %}
+{% if truthy(publication) %}
+  <p id="applicationStatus" class="app-notice" role="status">Загружаем приложение…</p>
+  <iframe class="app-runtime" id="applicationFrame" data-url="{{ url("app_data", project.pk) }}" sandbox="allow-scripts" referrerpolicy="no-referrer" title="{{ publication.snapshot.title }}" hidden></iframe>
+{% else %}
+  <main class="app-main"><p>Владелец ещё не опубликовал приложение.</p></main>
+{% endif %}
+{% endblock %}
+{% block scripts %}
+{% if truthy(publication) %}<script type="module" src="/static/js/application.js?v={{ ASSET_VERSION }}"></script>{% endif %}
+{% endblock %}

@@ -1,0 +1,12 @@
+{% extends "application/base.html" %}
+{% block title %}Приглашение — {{ invite.project.title }}{% endblock %}
+{% block app_content %}
+<main class="app-main app-narrow">
+  <section class="app-card">
+    <h1>Приглашение в приложение</h1>
+    <p>Проект «{{ invite.project.title }}» · {{ invite.get_role_display }}.</p>
+    <p class="muted">Приглашение примет аккаунт {{ request.user.username }}.</p>
+    <form method="post"><input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}"><button class="btn btn-primary" type="submit">Принять приглашение</button></form>
+  </section>
+</main>
+{% endblock %}

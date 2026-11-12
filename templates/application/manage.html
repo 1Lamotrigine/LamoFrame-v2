@@ -1,0 +1,96 @@
+{% extends "application/base.html" %}
+{% block title %}Данные и доступ — {{ project.title }}{% endblock %}
+{% block app_nav %}<a class="btn btn-outline" href="{{ url("editor", project.pk) }}">Открыть редактор</a>{% endblock %}
+{% block app_content %}
+<main class="app-main">
+  <h1>Данные и доступ</h1>
+  <p class="muted">{{ project.title }}</p>
+  {% for message in messages %}<p class="app-notice" role="status">{{ message }}</p>{% endfor %}
+  <div class="app-grid">
+    <section class="app-card">
+      <h2>Коллекции</h2>
+      <p class="muted">Создайте, например, «Клиенты» и «Сделки». Затем добавьте поля и привяжите таблицу к коллекции на холсте. Проект с коллекциями запускается на сервере LamoFrame.</p>
+      {% for collection in collections %}
+      <div class="app-row">
+        <div>
+          <strong>{{ collection.name }}</strong>
+          <ul class="app-fields">
+            {% for field in collection.fields.all %}
+            <li>{{ field.name }} · {{ field.get_kind_display }}{% if truthy(field.target) %} → {{ field.target.name }}{% endif %}{% if truthy(field.required) %} · обязательное{% endif %}
+            {% if field.kind == "status" %}<details><summary>Изменить статусы</summary><form method="post" class="app-form"><input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}"><input type="hidden" name="action" value="field_options"><input type="hidden" name="field" value="{{ field.id }}"><input class="input" name="options" aria-label="Статусы {{ field.name }}" value="{{ field.options|join(', ') }}" required><button class="btn btn-outline btn-sm">Сохранить статусы</button><small>После изменения повторно опубликуйте приложение.</small></form></details>{% endif %}</li>
+            {% else %}<li>Добавьте первое поле.</li>{% endfor %}
+          </ul>
+        </div>
+        <a class="btn btn-outline btn-sm" href="{{ url("app_records", project.pk, collection.pk) }}">Записи</a>
+      </div>
+      {% else %}<p>В проекте пока нет коллекций.</p>{% endfor %}
+      <form method="post" class="app-form">
+        <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
+        <input type="hidden" name="action" value="collection">
+        {{ collection_form.as_p | safe }}
+        <button type="submit" class="btn btn-primary">Создать коллекцию</button>
+      </form>
+    </section>
+    {% if truthy(collections) %}
+    <section class="app-card">
+      <h2>Добавить поле</h2>
+      <p class="muted">Для поля «Статус» перечислите значения. Для поля «Связь» выберите коллекцию. В коллекции с записями можно добавлять необязательные поля.</p>
+      <form method="post" class="app-form">
+        <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
+        <input type="hidden" name="action" value="field">
+        <label>Коллекция
+          <select class="select" name="collection" required>
+            {% for collection in collections %}<option value="{{ collection.pk }}"{% if selected_collection == collection.pk %} selected{% endif %}>{{ collection.name }}</option>{% endfor %}
+          </select>
+        </label>
+        {{ field_form.as_p | safe }}
+        <button type="submit" class="btn btn-primary">Добавить поле</button>
+      </form>
+    </section>
+    <section class="app-card">
+      <h2>Публикация</h2>
+      <p class="muted">Публикуется сохранённая версия холста и схемы. Записи остаются в базе. Открыть рабочее приложение могут участники.</p>
+      {% if truthy(publication) %}<p>Последняя публикация {{ publication.published_at|date("d.m.Y H:i") }}.</p>{% endif %}
+      <form action="{{ url("app_publish", project.pk) }}" method="post" class="app-actions">
+        <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
+        <input type="hidden" name="version" value="{{ project.updated_at }}">
+        <button class="btn btn-primary" type="submit">Опубликовать</button>
+        {% if truthy(publication) %}<a class="btn btn-outline" href="{{ url("app_run", project.pk) }}">Открыть приложение</a>{% endif %}
+      </form>
+    </section>
+    <section class="app-card">
+      <h2>Команда</h2>
+      <p class="muted">Скопируйте ссылку и передайте её сотруднику. Приглашение действует семь дней и принимается один раз.</p>
+      <form method="post" class="app-actions">
+        <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
+        <input type="hidden" name="action" value="invite">
+        <select class="select" name="role" aria-label="Роль приглашённого">
+          {% for key, label in roles %}<option value="{{ key }}"{% if key == "viewer" %} selected{% endif %}>{{ label }}</option>{% endfor %}
+        </select>
+        <button class="btn btn-outline" type="submit">Создать приглашение</button>
+      </form>
+      {% for invite in invites %}
+      <form method="post" class="app-row">
+        <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
+        <input type="hidden" name="token" value="{{ invite.token }}">
+        <a class="text-link" href="{{ url("app_accept_invite", invite.token) }}">{{ invite.get_role_display }} · ссылка</a>
+        <button class="btn btn-ghost btn-sm" name="action" value="revoke_invite">Отозвать</button>
+      </form>
+      {% endfor %}
+      {% for member in members %}
+      <form method="post" class="app-row app-actions">
+        <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
+        <input type="hidden" name="member" value="{{ member.pk }}">
+        <strong>{{ member.user.username }}</strong>
+        <select class="select" name="role" aria-label="Роль {{ member.user.username }}">
+          {% for key, label in roles %}<option value="{{ key }}"{% if key == member.role %} selected{% endif %}>{{ label }}</option>{% endfor %}
+        </select>
+        <button class="btn btn-outline btn-sm" name="action" value="member_role">Сохранить</button>
+        <button class="btn btn-ghost btn-sm" name="action" value="remove_member">Убрать доступ</button>
+      </form>
+      {% endfor %}
+    </section>
+    {% endif %}
+  </div>
+</main>
+{% endblock %}

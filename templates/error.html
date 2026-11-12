@@ -1,0 +1,3 @@
+{% extends "base.html" %}
+{% block title %}Ошибка {{ status }} — LamoFrame{% endblock %}
+{% block content %}<main style="max-width:620px;margin:15vh auto;padding:32px"><h1>{% if status == 404 %}Страница не найдена{% else %}Не удалось выполнить действие{% endif %}</h1><p style="margin:20px 0">{{ message }}</p><a class="btn btn-primary" href="/">К проектам</a></main>{% endblock %}

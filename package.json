@@ -1,0 +1,28 @@
+{
+  "name": "lamoframe-nextjs",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "test": "node --test tests/*.test.mjs",
+    "import:django": "node scripts/import-django.mjs",
+    "test:browser": "playwright test",
+    "format": "prettier --write \"lib/*.mjs\" \"scripts/*.mjs\" \"tests/*.mjs\" \"app/**/*.js\" *.mjs package.json",
+    "seed": "node scripts/seed-demo.mjs"
+  },
+  "dependencies": {
+    "@electric-sql/pglite": "0.5.16",
+    "next": "16.4.6",
+    "nunjucks": "3.2.4",
+    "react": "19.3.1",
+    "react-dom": "19.3.1",
+    "sharp": "0.35.5"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.65.0",
+    "prettier": "3.10.0"
+  }
+}
