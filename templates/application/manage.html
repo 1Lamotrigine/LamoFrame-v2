@@ -49,7 +49,7 @@
     </section>
     <section class="app-card">
       <h2>Публикация</h2>
-      <p class="muted">Публикуется сохранённая версия холста и схемы. Записи остаются в базе. Открыть рабочее приложение могут участники.</p>
+      <p class="muted">Публикуется сохранённая версия холста и схемы. Записи остаются в базе. {% if local_mode %}Рабочее приложение остаётся на этом устройстве и не публикуется в интернете.{% else %}Открыть рабочее приложение могут участники.{% endif %}</p>
       {% if truthy(publication) %}<p>Последняя публикация {{ publication.published_at|date("d.m.Y H:i") }}.</p>{% endif %}
       <form action="{{ url("app_publish", project.pk) }}" method="post" class="app-actions">
         <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
@@ -58,6 +58,7 @@
         {% if truthy(publication) %}<a class="btn btn-outline" href="{{ url("app_run", project.pk) }}">Открыть приложение</a>{% endif %}
       </form>
     </section>
+    {% if not local_mode %}
     <section class="app-card">
       <h2>Команда</h2>
       <p class="muted">Скопируйте ссылку и передайте её сотруднику. Приглашение действует семь дней и принимается один раз.</p>
@@ -90,6 +91,7 @@
       </form>
       {% endfor %}
     </section>
+    {% else %}<section class="app-card"><h2>Локальная CRM</h2><p>Рабочая версия и записи доступны только в этом браузере. Приглашения и совместная работа в локальном режиме отключены. Для переноса CRM скачайте полную резервную копию мастерской.</p><a class="btn btn-outline" href="/local/backup/">Резервная копия</a></section>{% endif %}
     {% endif %}
   </div>
 </main>

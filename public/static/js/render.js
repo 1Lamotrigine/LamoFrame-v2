@@ -1129,7 +1129,7 @@ export function renderFrame(frame, editor = false, index = 0, ctx = {}) {
 }
 
 export function renderSections(doc, { editor = false, appData } = {}) {
-  return (doc?.frames || []).map((frame, i) => renderFrame(frame, editor, i, { appData })).join("");
+  return (doc?.frames || []).map((frame, i) => renderFrame(frame, editor, i, { appData, imageMap: typeof window!=="undefined"&&window.LAMO_LOCAL?new Map(Object.entries(window.LAMO_MEDIA_URLS||{})):undefined })).join("");
 }
 
 /**
@@ -2031,6 +2031,7 @@ ${scripts && appOrigin ? `<script>${APP_ACTION_SCRIPT};document.querySelectorAll
       html = html.split(`src="${attr(url)}"`).join(`src="${dataUri}"`);
     }
   }
+  if(typeof window!=='undefined'&&window.LAMO_LOCAL)for(const [url,blob]of Object.entries(window.LAMO_MEDIA_URLS||{}))html=html.split(`src="${attr(url)}"`).join(`src="${blob}"`);
   return html;
 }
 

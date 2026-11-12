@@ -10,11 +10,16 @@
     "test": "node --test tests/*.test.mjs",
     "import:django": "node scripts/import-django.mjs",
     "test:browser": "playwright test",
-    "format": "prettier --write \"lib/*.mjs\" \"scripts/*.mjs\" \"tests/*.mjs\" \"app/**/*.js\" *.mjs package.json",
-    "seed": "node scripts/seed-demo.mjs"
+    "format": "prettier --write \"browser/**/*.mjs\" \"browser/*.mjs\" \"lib/*.mjs\" \"scripts/*.mjs\" \"tests/*.mjs\" \"app/**/*.js\" *.mjs package.json",
+    "seed": "node scripts/seed-demo.mjs",
+    "build:browser": "node scripts/build-browser.mjs",
+    "predev": "npm run build:browser",
+    "prebuild": "npm run build:browser",
+    "export:browser": "node scripts/export-browser.mjs"
   },
   "dependencies": {
     "@electric-sql/pglite": "0.5.16",
+    "buffer": "6.0.3",
     "next": "16.4.6",
     "nunjucks": "3.2.4",
     "react": "19.3.1",
@@ -23,6 +28,7 @@
   },
   "devDependencies": {
     "@playwright/test": "1.65.0",
+    "esbuild": "0.28.2",
     "prettier": "3.10.0"
   }
 }

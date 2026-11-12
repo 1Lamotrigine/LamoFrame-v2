@@ -573,6 +573,7 @@
 {% block scripts %}
 <script>
   Object.assign(window.BUILDER, {
+    localMode: {{ "true" if local_mode else "false" }},
     projectId: {{ project.pk }},
     userId: {{ user.id }},
     collectionSchema: JSON.parse(document.getElementById("collection-schema").textContent),

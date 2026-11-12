@@ -23,7 +23,8 @@ async function run(mode, action) {
   });
 }
 export function localDrafts(userId, projectId) {
-  const scope = `${userId}:${projectId}:`;
+  const generation=typeof localStorage!=="undefined"?(localStorage.getItem("lamoframe.recoveryGeneration")||"initial"):"initial";
+  const scope = `${generation}:${userId}:${projectId}:`;
   const id = scope + crypto.randomUUID();
   return {
     save: (value) =>

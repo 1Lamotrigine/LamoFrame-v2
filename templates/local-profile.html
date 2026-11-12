@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block title %}Локальный профиль — LamoFrame{% endblock %}
+{% block body_class %}auth-body{% endblock %}
+{% block content %}
+<div class="auth"><aside class="auth-visual"><a class="logo" href="/">LamoFrame</a><div class="auth-hero"><h1>Ваша мастерская на этом устройстве</h1><p>Создавайте сайты и CRM. Проекты сохраняются в этом браузере.</p></div></aside>
+<main class="auth-form-wrap"><div class="auth-stack"><form class="auth-form" method="post" action="/accounts/signup/">
+<h2>Создать локальный профиль</h2><p class="lead">Пароль и серверный аккаунт не нужны. Профиль отделяет вашу мастерскую от других локальных профилей, но не защищает данные паролем.</p>
+{% if message %}<p class="auth-error" role="alert">{{ message }}</p>{% endif %}
+<label for="profileName">Ваше имя</label><input class="input" id="profileName" name="username" maxlength="100" autocomplete="nickname" required placeholder="Например, Нияз">
+<button class="btn btn-primary" type="submit">Создать профиль</button>
+</form>
+{% if profiles|length %}<section class="auth-form"><h2>Продолжить работу</h2>{% for profile in profiles %}<form method="post" action="/accounts/login/"><input type="hidden" name="profile" value="{{ profile.id }}"><button class="btn btn-outline" type="submit" style="width:100%">{{ profile.username }}</button></form>{% endfor %}</section>{% endif %}
+<p class="muted">Данные доступны только в этом браузере и по этому адресу сайта. Очистка данных браузера удалит мастерскую. Скачивайте резервные копии.</p>
+<p><a class="text-link" href="/local/backup/">Перенести мастерскую из резервной копии</a></p>
+</div></main></div>
+{% endblock %}

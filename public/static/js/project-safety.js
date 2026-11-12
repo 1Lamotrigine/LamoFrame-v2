@@ -318,7 +318,8 @@ export function setupProjectSafety({
     try {
       const { publication: published } = await publication(projectId);
       body.innerHTML =
-        "<p>Публикация создаёт отдельный снимок сохранённого сайта. Последующее редактирование остаётся в черновике. Любой человек со ссылкой сможет открыть опубликованный сайт.</p>";
+        "<p>Публикация создаёт отдельный снимок сохранённого сайта. Последующее редактирование остаётся в черновике. </p>";
+      if(window.LAMO_LOCAL)notice('Это локальный снимок. Ссылка работает только в этом браузере. Чтобы поделиться обычным сайтом, скачайте ZIP или HTML.');
       if (published) {
         notice(
           `Опубликовано ${new Date(published.published_at).toLocaleString("ru-RU")}${published.source_version !== version() ? " · в черновике есть новая версия" : ""}`,

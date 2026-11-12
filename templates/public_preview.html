@@ -24,7 +24,7 @@
   <header class="public-bar">
     <span class="logo-mark"><svg class="icon" style="width:15px;height:15px"><use href="/static/icons.svg#i-logo"></use></svg></span>
     <strong>{{ project.title }}</strong>
-    <span class="muted">публичное превью · только чтение</span>
+    <span class="muted">{% if local_mode %}локальное превью · доступно только в этом браузере{% else %}публичное превью · только чтение{% endif %}</span>
     <div class="spacer"></div>
     {% if truthy(project.exported_html) %}
       <a href="{{ url("public_raw", project.slug) }}" target="_blank" rel="noopener">Открыть страницу отдельно</a>

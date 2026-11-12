@@ -16,6 +16,7 @@
     </form>
   </div>
   <div class="spacer"></div>
+  {% if local_mode %}<a class="btn btn-outline btn-sm" href="/local/backup/">Резервная копия</a>{% endif %}
   <button class="btn btn-icon" type="button" data-theme-toggle aria-label="Переключить тему">
     <svg class="icon theme-icon-light"><use href="/static/icons.svg#i-moon"></use></svg>
     <svg class="icon theme-icon-dark"><use href="/static/icons.svg#i-sun"></use></svg>
@@ -37,6 +38,7 @@
 </header>
 
 <main class="dash-main">
+  {% if local_mode %}<p class="local-mode-note">Локальная мастерская · данные хранятся в этом браузере. Для переноса на другое устройство используйте резервную копию.</p>{% endif %}
   <div class="dash-head">
     <div>
       <h1>{% if truthy(query) %}Результаты поиска{% else %}Мои проекты{% endif %}</h1>
@@ -88,7 +90,7 @@
             <div class="project-actions">
               {% if truthy(project.site_published) %}
                 <a class="btn btn-icon" href="{{ url("public_preview", project.slug) }}" target="_blank" rel="noopener"
-                   aria-label="Публичное превью" title="Публичное превью">
+                   aria-label="{% if local_mode %}Локальное превью{% else %}Публичное превью{% endif %}" title="{% if local_mode %}Локальное превью{% else %}Публичное превью{% endif %}">
                   <svg class="icon"><use href="/static/icons.svg#i-external"></use></svg>
                 </a>
               {% endif %}

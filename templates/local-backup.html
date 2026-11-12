@@ -1,0 +1,5 @@
+{% extends "application/base.html" %}
+{% block title %}Резервная копия — LamoFrame{% endblock %}
+{% block app_nav %}<a class="btn btn-outline" href="/">К проектам</a>{% endblock %}
+{% block app_content %}<main class="app-main app-narrow"><h1>Резервная копия мастерской</h1><section class="app-card"><p>В копию входят все локальные профили, проекты, изображения, записи CRM, опубликованные версии и история. Храните файл у себя: в нём есть данные вашей мастерской.</p><button class="btn btn-primary" type="button" data-local-export>Скачать полную копию</button></section>
+<section class="app-card"><h2>Восстановить мастерскую</h2><p>Выберите JSON-файл резервной копии LamoFrame. Восстановление заменит всю текущую мастерскую. Перед заменой скачайте её копию.</p><form id="localImportForm"><label>Файл копии<input class="input" type="file" name="backup" accept="application/json,.json" required></label><label><input type="checkbox" name="confirm" required> Заменить текущие локальные данные выбранной копией</label><button class="btn btn-outline" type="submit">Восстановить из файла</button></form><p id="localBackupStatus" role="status"></p></section></main>{% endblock %}

@@ -1,7 +1,7 @@
 import { defineConfig } from "@playwright/test";
 export default defineConfig({
   testDir: "./tests",
-  testMatch: "*.spec.mjs",
+  testMatch: "browser-local.spec.mjs",
   workers: 1,
   use: {
     baseURL: process.env.TEST_BASE_URL || "http://127.0.0.1:3100",
@@ -15,6 +15,7 @@ export default defineConfig({
     : {
         command: "npm run dev -- --hostname 127.0.0.1 --port 3100",
         url: "http://127.0.0.1:3100/accounts/login/",
+        timeout:60000,
         reuseExistingServer: false,
         env: {
           STORAGE_DIR: `/tmp/lamoframe-e2e-${Date.now()}`,

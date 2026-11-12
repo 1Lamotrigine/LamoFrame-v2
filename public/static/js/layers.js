@@ -118,7 +118,7 @@ export function renderAssets() {
       (asset) => `
       <div class="asset-item">
         <button class="asset-thumb" type="button" data-add-asset="${asset.id}" title="Добавить на холст">
-          <img src="${asset.url}" alt="${escapeAttr(asset.name)}" loading="lazy">
+          <img src="${window.LAMO_MEDIA_URLS?.[asset.url]||asset.url}" alt="${escapeAttr(asset.name)}" loading="lazy">
         </button>
         <div class="asset-meta">
           <span class="asset-name" title="${escapeAttr(asset.name)}">${escapeHtml(asset.name)}</span>
